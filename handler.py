@@ -1,9 +1,9 @@
-import sqlite3 as sql
+import psycopg2 as sql
 
 
 class RequestHandler:
     def __init__(self, db_host):
-        self._connection = sql.connect(db_host)
+        self._connection = sql.connect(db_host, sslmode='require')
         self._cursor = self._connection.cursor()
 
     def execute(self, request):
