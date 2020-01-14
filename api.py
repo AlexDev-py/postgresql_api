@@ -43,8 +43,8 @@ class API(RequestHandler):
                         if value != get_field(old_table, key):
                             fields.append('{}={}'.format(key, add_quotes(value)))
                 if len(fields) != 0:
-                    self._cursor.execute("UPDATE '%s' SET %s WHERE id = %s" % (type(table).__name__.lower(),
-                                                                               str(', '.join(fields)), table.id))
+                    self._cursor.execute("UPDATE %s SET %s WHERE id = %s" % (type(table).__name__.lower(),
+                                                                             str(', '.join(fields)), table.id))
                     self.commit()
             return 'Successfully'
 
@@ -92,7 +92,7 @@ class API(RequestHandler):
             condition.append("{} {} {}".format(field, opt, str(value)))
 
         if len(condition) != 0:
-            data = self.execute("SELECT * FROM '%s' WHERE %s" % (table_name, ' and '.join(condition)))
+            data = self.execute("SELECT * FROM %s WHERE %s" % (table_name, ' and '.join(condition)))
 
         else:
             data = self._select(table_name)
@@ -138,9 +138,9 @@ class API(RequestHandler):
             raise SqlApiError(f'No value{"s" if len(obj_fields) > 1 else ""} for'
                               f' field{"s" if len(obj_fields) > 1 else ""}: {", ".join(obj_fields)}')
 
-        self._cursor.execute("INSERT INTO '%s' (%s) VALUES (%s)" % (table_name,
-                                                                    ', '.join(get_fields(obj)),
-                                                                    ', '.join(fields)))
+        self._cursor.execute("INSERT INTO %s (%s) VALUES (%s)" % (table_name,
+                                                                  ', '.join(get_fields(obj)),
+                                                                  ', '.join(fields)))
         self.commit()
         return 'Successfully'
 
@@ -183,9 +183,9 @@ class API(RequestHandler):
         if field_name not in obj_fields:
             raise SqlApiError(f'Field {field_name} not found in table class')
 
-        self._cursor.execute("ALTER TABLE '%s' ADD %s %s" % (table_name, field_name, vars(obj)[f'{field_name}'][0]))
+        self._cursor.execute("ALTER TABLE %s ADD %s %s" % (table_name, field_name, vars(obj)[f'{field_name}'][0]))
         self.commit()
-        self._cursor.execute("UPDATE '%s' SET %s = %s" % (table_name, field_name, str(add_quotes(start_value))))
+        self._cursor.execute("UPDATE %s SET %s = %s" % (table_name, field_name, str(add_quotes(start_value))))
         self.commit()
         return 'Successfully'
 
@@ -204,10 +204,11 @@ class API(RequestHandler):
                     fields += f'{key}{value[0]}, '
             fields = fields[:len(fields)-2]
             request = f'''
-                          CREATE TABLE {table_name}
-                          (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, {fields})
-                       '''
+                                      CREATE TABLE {table_name}
+                                      (id SERIAL PRIMARY KEY NOT NULL, {fields})
+                                   '''
             self._cursor.execute(request)
+            self.commit()
         return 'Successfully'
 
     def get_cursor(self):
