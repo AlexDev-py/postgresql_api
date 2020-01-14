@@ -19,7 +19,7 @@ def dict_():
 
 def add_quotes(value):
     if isinstance(value, str) or isinstance(value, list):
-        value = '"{}"'.format(str(value).replace('"', "'"))
+        value = "'{}'".format(str(value).replace("'", '"'))
     return value
 
 
