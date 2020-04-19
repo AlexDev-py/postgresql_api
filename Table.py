@@ -9,3 +9,9 @@ class Table:
             if not k.startswith('__'):
                 vars_[k] = i
         return vars_
+
+    @classmethod
+    def get_fields(cls):
+        fields = [i for i in cls.get_types().keys()]
+        fields.remove('id')
+        return fields
