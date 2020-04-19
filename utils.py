@@ -19,13 +19,13 @@ def dict_():
 
 def convert_from_data(value):
     if isinstance(value, str) or isinstance(value, list):
-        value = '{}'.format(str(value).replace('``', '"'))
+        value = '{}'.format(str(value).replace("`", "'"))
     return value
 
 
 def convert_from_class(value):
     if isinstance(value, str) or isinstance(value, list):
-        value = '"{}"'.format(str(value).replace('"', "``"))
+        value = "'{}'".format(str(value).replace("'", "`"))
     return value
 
 
