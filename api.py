@@ -6,9 +6,19 @@ class PostgreSql:
         self._connection = sql.connect(db_host, sslmode='require')
         self._cursor = self._connection.cursor()
 
-    def execute(self, request):
+    def fetchall(self, request: str):
+        """
+        Выполняем запрос `request`
+        и возвращаем результат используя fetchall
+        """
+
         self._cursor.execute(request)
         return self._cursor.fetchall()
+
+    def execute(self, request: str):
+        """ Выполняем запрос `request` """
+
+        self._cursor.execute(request)
 
     def commit(self):
         self._connection.commit()
